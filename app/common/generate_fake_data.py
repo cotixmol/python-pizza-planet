@@ -55,7 +55,9 @@ def generate_fake_beverages():
         {'name': 'Pepsi', 'price': 2.0},
     ]
     for beverage in beverages:
-        beverage_entry = Beverage(**beverage)
+        beverage_name = beverage['name']
+        beverage_price = beverage['price']
+        beverage_entry = Beverage(name=beverage_name,price=beverage_price)
         db.session.add(beverage_entry)
     db.session.commit()
 
@@ -67,10 +69,8 @@ def get_random_client_from_list():
     """Returns a random client name from the list of clients"""
     return random.choice(generate_clients())
 
-def generate_fake_orders(num_orders=100, db_session=None):
+def generate_fake_orders(num_orders=100):
     """Generates fake orders for the database"""
-    if not db_session:
-        db_session = db.session
 
     sizes = Size.query.all()
     ingredients = Ingredient.query.all()
@@ -110,11 +110,13 @@ def generate_fake_orders(num_orders=100, db_session=None):
             beverages_selected)
 
 def main():
+    """Main function to generate fake data"""
     db.create_all()
     generate_fake_sizes()
     generate_fake_ingredients()
     generate_fake_beverages()
     generate_fake_orders()
 
+#Runs the main function when the script is executed
 if __name__ == '__main__':
     main()
